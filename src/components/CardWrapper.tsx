@@ -70,7 +70,7 @@ const CardWrapper: React.FC = () => {
 
   // Render the UI
   return (
-    <div>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "16px" }}>
       {/* Button to add a new card */}
       <button
         onClick={addCard}
@@ -87,17 +87,16 @@ const CardWrapper: React.FC = () => {
         <Plus /> {/* Plus icon for visual indication */}
       </button>
       {/* Container for all user cards */}
-      <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
         {cards.map(card => (
           <UserCard
-            key={card.id} // Unique key for React rendering
-            id={card.id} // Card ID
-            name={card.name} // Card name
+            key={card.id}          // Unique key for React rendering
+            id={card.id}           // Card ID
+            name={card.name}       // Card name
             entries={card.entries} // Card entries
             onNameChange={newName => handleNameChange(card.id, newName)} // Handler for name change
             onRemove={() => removeCard(card.id)} // Handler for removing card
             onBulkEditEntries={newEntries => handleBulkEditEntries(card.id, newEntries)} // Handler for bulk editing entries
-            // The following are not needed anymore for the new format:
             // onAddEntry={() => {}}
             // onRemoveEntry={() => {}}
           />

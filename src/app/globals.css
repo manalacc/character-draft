@@ -21,7 +21,7 @@
   .card {
     border: 1px solid #222;
     background: #181818;
-    color: #ededed;
+    color: #ffffff;
     box-shadow: 0 2px 12px rgba(0,0,0,0.32);
   }
 
@@ -68,8 +68,8 @@ body {
 }  
 
 .card {
-  border: 1px solid #e0e0e0;
-  background: #f8f9fa;
+  border: 1px solid #000000;
+  background: #4b4b4b;
   padding: 20px;
   border-radius: 16px;
   max-width: 400px;

@@ -92,16 +92,18 @@ const UserCard: React.FC<UserCardProps> = ({
 
   return (
     <div className="card">
-      <div style={{ display: "flex", marginBottom: 8, fontSize: '1.2rem', fontWeight: 'bold', alignItems: 'center' }}>
+      <div style={{ display: "flex", marginBottom: 8, fontSize: '1.2rem', fontWeight: 'bold', alignItems: 'center',  }}>
         <input
           type="text"
           value={name}
           onChange={e => onNameChange(e.target.value)}
           placeholder="User Name"
           className="input"
+          style={{ border: "none" }}
         />
         <button
           onClick={onRemove}
+          style={{ marginBottom: 8, background: "none", cursor: "pointer" }}
           title="Remove card"
           className="button-remove"
         >
@@ -114,7 +116,7 @@ const UserCard: React.FC<UserCardProps> = ({
         onChange={e => handleBulkEdit(e.target.value)}
         className="input"
         rows={Math.max(5, entries.length)}
-        style={{ resize: "vertical", minHeight: 120, fontFamily: "inherit", marginBottom: 12 }}
+        style={{ resize: "vertical", minHeight: 120, fontFamily: "inherit", marginBottom: 12, border: "None" }}
         placeholder="Enter entries, one per line"
       />
       <button
@@ -123,29 +125,31 @@ const UserCard: React.FC<UserCardProps> = ({
         style={{ width: "100%" }}
         disabled={text.trim().length === 0}
       >
-        Pick Random Entry
+        Pick Randomly
       </button>
       {randomEntry && (
         <div style={{
           marginTop: 8,
-          padding: "10px 0",
+          padding: "10px 12px",
           background: "#eaf6ff",
           borderRadius: 8,
-          textAlign: "center",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
           fontWeight: "bold",
           color: "#0074D9",
           fontSize: "1.1rem"
         }}>
-          {randomEntry.text}
+          <span>{randomEntry.text}</span>
           <button
             onClick={handleRemoveRandomEntry}
             className="button-remove"
             title="Delete this entry"
-            style={{ marginLeft: 12 }}
+            style={{ marginLeft: 12, border: "none", background: "none", cursor: "pointer", color: "#ff0000" }}
           >
             <Trash2 size={15} />
           </button>
-        </div>
+        </div>     
       )}
     </div>
   );

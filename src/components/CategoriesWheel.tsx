@@ -26,7 +26,6 @@ const CategoriesWheel: React.FC = () => {
         const el = textareaRef.current;
         if (!el) return;
         const handleWheel = (e: WheelEvent) => {
-            // Only apply if textarea is scrollable
             if (el.scrollHeight > el.clientHeight) {
                 e.preventDefault();
                 el.scrollTop += e.deltaY * 0.25;
@@ -52,7 +51,7 @@ const CategoriesWheel: React.FC = () => {
 
     return (
         <div className="card" style={{ maxWidth: 400, margin: "32px auto" }}>
-            <h2 style={{ textAlign: "center", color: "#176638ff", marginBottom: 16 }}>Categories Wheel</h2>
+            <h2 style={{ textAlign: "center", color: "#58c083ff", marginBottom: 16, fontWeight: "bold" }}>Categories</h2>
             <form
                 onSubmit={e => {
                     e.preventDefault();
@@ -66,7 +65,7 @@ const CategoriesWheel: React.FC = () => {
                     onChange={e => setText(e.target.value)}
                     className="input"
                     rows={Math.max(5, categories.length)}
-                    style={{ resize: "vertical", minHeight: 120, fontFamily: "inherit" }}
+                    style={{ resize: "vertical", minHeight: 120, fontFamily: "inherit", border: "None" }}
                     placeholder="Enter categories, one per line"
                 />
                 <button
@@ -89,7 +88,7 @@ const CategoriesWheel: React.FC = () => {
                     color: "#0074D9",
                     fontSize: "1.1rem"
                 }}>
-                    Selected Category: {selected}
+                    Category: {selected}
                 </div>
             )}
         </div>

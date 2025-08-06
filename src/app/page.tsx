@@ -16,27 +16,14 @@
 import React, { useState } from "react";
 import CardWrapper from "@/components/CardWrapper";
 import CategoriesWheel from "@/components/CategoriesWheel";
+import Resizable from "@/components/Resizable";
 
 export default function Home() {
   const [name, setName] = useState("");
 
   return (
     <div>
-      <div>
-        <CategoriesWheel />
-      </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          padding: "30px",
-          textAlign: "center",
-        }}
-      >
-        <CardWrapper />
-      </div>
-      
+      <Resizable />
 
       <div className="footer" style={{ fontSize: "10px" }}>not affiliated with any real drafts</div>
     </div>
