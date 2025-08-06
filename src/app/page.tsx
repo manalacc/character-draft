@@ -14,8 +14,6 @@
 'use client';
 
 import React, { useState } from "react";
-import CardWrapper from "@/components/CardWrapper";
-import CategoriesWheel from "@/components/CategoriesWheel";
 import Resizable from "@/components/Resizable";
 
 export default function Home() {

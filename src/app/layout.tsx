@@ -14,7 +14,6 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "The Character Draft",
-  description: "like an NFL draft but for fictional characters",
 };
 
 export default function RootLayout({

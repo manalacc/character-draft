@@ -4,8 +4,28 @@ import { GripVertical } from "lucide-react";
 import CardWrapper from "@/components/CardWrapper";
 import CategoriesWheel from "@/components/CategoriesWheel";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+import Display from "@/components/Display";
+import { useState } from "react";
 
 export default function Resizable() {
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+    const [categories, setCategories] = useState<string[]>([]);
+    const [userCards, setUserCards] = useState<any[]>([]);
+    const [entrySelections, setEntrySelections] = useState<Record<string, string | null>>({});
+
+    // Handle category selection from dropdown
+    const handleCategorySelect = (category: string) => {
+        setSelectedCategory(category);
+    };
+
+    // Handle entry selection from dropdown
+    const handleEntrySelect = (cardId: string, entry: string) => {
+        setEntrySelections(prev => ({
+            ...prev,
+            [cardId]: entry
+        }));
+    };
+
     return (
         <PanelGroup autoSaveId="example" direction="horizontal">
         <Panel defaultSize={75} minSize={20} maxSize={75}>
@@ -17,8 +37,14 @@ export default function Resizable() {
                 alignItems: "center",
                 padding: "30px",
             }}>
-                <CategoriesWheel />
-                <CardWrapper />
+                <CategoriesWheel 
+                    onCategorySelect={setSelectedCategory} 
+                    onCategoriesChange={setCategories}
+                />
+                <CardWrapper 
+                    onCardsChange={setUserCards}
+                    onEntrySelections={setEntrySelections} 
+                />
             </div>
         </Panel>
         <PanelResizeHandle 
@@ -52,7 +78,14 @@ export default function Resizable() {
                 alignItems: "center",
                 height: "100%"
             }}>
-                B
+                <Display 
+                    category={selectedCategory} 
+                    categories={categories}
+                    userCards={userCards}
+                    entrySelections={entrySelections}
+                    onCategorySelect={handleCategorySelect} // Pass the handlers
+                    onEntrySelect={handleEntrySelect} // Pass the handlers
+                />
             </div>
         </Panel>
         </PanelGroup>

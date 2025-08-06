@@ -2,12 +2,21 @@ import React, { useState, useEffect, useRef } from "react";
 
 const LOCAL_STORAGE_KEY = "fictional-character-draft-categories";
 
-const CategoriesWheel: React.FC = () => {
+type CategoriesWheelProps = {
+    onCategorySelect: (category: string | null) => void;
+    onCategoriesChange?: (categories: string[]) => void;
+};
+
+const CategoriesWheel: React.FC<CategoriesWheelProps> = ({
+    onCategorySelect,
+    onCategoriesChange
+}) => {
     const [text, setText] = useState<string>("");
     const [selected, setSelected] = useState<string | null>(null);
     const [mounted, setMounted] = useState(false);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+    // Load text from localStorage on mount
     useEffect(() => {
         setMounted(true);
         if (typeof window !== "undefined") {
@@ -16,12 +25,14 @@ const CategoriesWheel: React.FC = () => {
         }
     }, []);
 
+    // Save text to localStorage whenever it changes
     useEffect(() => {
         if (mounted && typeof window !== "undefined") {
             window.localStorage.setItem(LOCAL_STORAGE_KEY, text);
         }
     }, [text, mounted]);
 
+    // Handle wheel event for smooth scrolling in textarea
     useEffect(() => {
         const el = textareaRef.current;
         if (!el) return;
@@ -35,15 +46,35 @@ const CategoriesWheel: React.FC = () => {
         return () => el.removeEventListener("wheel", handleWheel);
     }, []);
 
+    // Update categories whenever text changes
+    useEffect(() => {
+        const categories = text
+            .split('\n')
+            .map(c => c.trim())
+            .filter(c => c.length > 0);
+        onCategoriesChange?.(categories);
+    }, [text, onCategoriesChange]);
+
+    // Handle category selection
+    useEffect(() => {
+        if (selected) {
+            onCategorySelect(selected);
+        } else {
+            onCategorySelect(null);
+        }
+    }, [selected, onCategorySelect]);
+
     const categories = text
         .split('\n')
         .map(c => c.trim())
         .filter(c => c.length > 0);
 
+    // Handle random pick
     const handleRandomPick = () => {
         if (categories.length > 0) {
             const idx = Math.floor(Math.random() * categories.length);
             setSelected(categories[idx]);
+            onCategoriesChange?.(categories); 
         }
     };
 
@@ -74,7 +105,7 @@ const CategoriesWheel: React.FC = () => {
                     style={{ width: "100%" }}
                     disabled={categories.length === 0}
                 >
-                    Pick Random Category
+                    Random
                 </button>
             </form>
             {selected && (
@@ -88,7 +119,7 @@ const CategoriesWheel: React.FC = () => {
                     color: "#0074D9",
                     fontSize: "1.1rem"
                 }}>
-                    Category: {selected}
+                    {selected}
                 </div>
             )}
         </div>

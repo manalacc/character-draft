@@ -13,16 +13,19 @@ interface UserCardProps {
   onNameChange: (newName: string) => void;
   onRemove: () => void;
   onBulkEditEntries: (newEntries: string[]) => void;
+  onEntrySelect?: (cardId: string | null, entry: string | null) => void;
 }
 
 const LOCAL_STORAGE_KEY = "fictional-character-draft-entries";
 
 const UserCard: React.FC<UserCardProps> = ({
+  id,
   name,
   entries,
   onNameChange,
   onRemove,
   onBulkEditEntries,
+  onEntrySelect,
 }) => {
   const [text, setText] = useState<string>(entries.map(e => e.text).join('\n'));
   const [randomEntry, setRandomEntry] = useState<UserEntry | null>(null);
@@ -42,6 +45,7 @@ const UserCard: React.FC<UserCardProps> = ({
     }
   }, [text, mounted, name]);
 
+  // Handle wheel event for smooth scrolling in textarea
   useEffect(() => {
     const el = textareaRef.current;
     if (!el) return;
@@ -71,7 +75,9 @@ const UserCard: React.FC<UserCardProps> = ({
       .filter(t => t.length > 0);
     if (entryList.length > 0) {
       const idx = Math.floor(Math.random() * entryList.length);
-      setRandomEntry({ id: String(idx), text: entryList[idx] });
+      const selectedEntry = { id: String(idx), text: entryList[idx] };
+      setRandomEntry(selectedEntry);
+      onEntrySelect?.(id, selectedEntry.text); // Pass to parent
     }
   };
 
@@ -86,6 +92,7 @@ const UserCard: React.FC<UserCardProps> = ({
     setText(updatedText);
     onBulkEditEntries(updatedEntries);
     setRandomEntry(null);
+    onEntrySelect?.(id, null); // Clear selection
   };
 
   if (!mounted) return null;
@@ -125,7 +132,7 @@ const UserCard: React.FC<UserCardProps> = ({
         style={{ width: "100%" }}
         disabled={text.trim().length === 0}
       >
-        Pick Randomly
+        Random
       </button>
       {randomEntry && (
         <div style={{

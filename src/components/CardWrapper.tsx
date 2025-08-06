@@ -6,11 +6,24 @@ import { Plus } from 'lucide-react'; // Import Plus icon for UI
 const LOCAL_STORAGE_KEY = 'fictional-character-draft-cards'; // Define the localStorage key for saving cards
 
 // Define the shape of a card, which includes a name and a list of entries
-type CardData = { id: string; name: string; entries: { id: string; text: string }[] };
+type CardData = {
+  id: string;
+  name: string;
+  entries: { id: string; text: string }[];
+};
 
-const CardWrapper: React.FC = () => {
+type CardWrapperProps = {
+  onCardsChange?: (cards: CardData[]) => void;
+  onEntrySelections?: (selections: Record<string, string | null>) => void;
+}; // Define props for CardWrapper, currently empty
+
+const CardWrapper: React.FC<CardWrapperProps> = ({ 
+  onCardsChange, 
+  onEntrySelections 
+}) => {
   // State to hold all cards; initially empty array
   const [cards, setCards] = useState<CardData[]>([]);
+  const [entrySelections, setEntrySelections] = useState<Record<string, string | null>>({}); // Track selections
 
   // Load cards from localStorage when the component mounts
   useEffect(() => {
@@ -32,6 +45,16 @@ const CardWrapper: React.FC = () => {
   useEffect(() => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(cards)); // Serialize and save cards array
   }, [cards]); // Run whenever cards changes
+
+  useEffect(() => {
+    // Call the provided handlers with the current cards state
+    onCardsChange?.(cards);
+  }, [cards, onCardsChange]); // Run whenever cards changes
+
+  // Notify parent when selections change
+  useEffect(() => {
+    onEntrySelections?.(entrySelections);
+  }, [entrySelections, onEntrySelections]);
 
   // Add a new card to the cards array
   const addCard = () => {
@@ -68,6 +91,14 @@ const CardWrapper: React.FC = () => {
     ));
   };
 
+  const handleEntrySelect = (cardId: string | null, entry: string | null) => {
+    if (cardId === null) return;
+    setEntrySelections(prev => ({
+      ...prev,
+      [cardId]: entry
+    }));
+  };
+
   // Render the UI
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "16px" }}>
@@ -97,8 +128,7 @@ const CardWrapper: React.FC = () => {
             onNameChange={newName => handleNameChange(card.id, newName)} // Handler for name change
             onRemove={() => removeCard(card.id)} // Handler for removing card
             onBulkEditEntries={newEntries => handleBulkEditEntries(card.id, newEntries)} // Handler for bulk editing entries
-            // onAddEntry={() => {}}
-            // onRemoveEntry={() => {}}
+            onEntrySelect={handleEntrySelect} // 
           />
         ))}
       </div>
